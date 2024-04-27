@@ -5,9 +5,7 @@ description: An advanced example of database CRUD (Create, Read, Update, Delete)
 permalink: /data/database
 ---
 
-<!-- HTML table layout for page.  The table is filled by JavaScript below. 
--->
-
+<!-- HTML table layout for page. The table is filled by JavaScript below. -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -20,6 +18,7 @@ permalink: /data/database
 
 <h1>Let 'Em Cook Leaderboard</h1>
 
+<!-- Table headers -->
 <table>
   <thead>
   <tr>
@@ -33,15 +32,18 @@ permalink: /data/database
     <!-- javascript generated data -->
   </tbody>
 </table>
+
+<!-- Button to edit user -->
 <div>
   <button class="edit-user" onclick='window.location.href = "{{site.baseurl}}/lmc-editUser"'>Edit User</button>
 </div>
 
+<!-- Button to delete user -->
 <div>
   <button class="delete-user" onclick='window.location.href = "{{site.baseurl}}/lmc-deleteUser"'>Delete User</button>
 </div>
 
-
+<!-- JavaScript code to fetch and populate data -->
 <script type="module">
   // uri variable and options object are obtained from config.js
   import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
@@ -82,31 +84,34 @@ permalink: /data/database
         // Sort data by points (highest to lowest)
         data.sort((a, b) => b.points - a.points);
 
+        // Loop through the sorted data
         for (const row of data) {
-            // tr and td build out for each row
+            // Create table row and cells for each user
             const tr = document.createElement("tr");
             const name = document.createElement("td");
             const id = document.createElement("td");
             const age = document.createElement("td");
             const points = document.createElement("td");
-            // data is specific to the API
+
+            // Populate cells with user data
             name.innerHTML = row.name; 
             id.innerHTML = row.uid; 
             age.innerHTML = row.age; 
             points.innerHTML = row.points;
-            // this builds td's into tr
+
+            // Append cells to the row
             tr.appendChild(name);
             tr.appendChild(id);
             tr.appendChild(age);
             tr.appendChild(points);
 
-            // append the row to table
+            // Append the row to the table body
             resultContainer.appendChild(tr);
         }
     });
 })
 
-  // catch fetch errors (ie ACCESS to server blocked)
+  // catch fetch errors (i.e., access to server blocked)
   .catch(err => {
     console.error(err);
     const tr = document.createElement("tr");
@@ -116,4 +121,7 @@ permalink: /data/database
     resultContainer.appendChild(tr);
   });
 </script>
+</body>
+</html>
+
 
