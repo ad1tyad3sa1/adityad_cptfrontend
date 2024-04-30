@@ -9,7 +9,7 @@ console.log(name);
 // Retrieve the image element and set its properties
 var image = document.getElementById("image");
 image.style.width = '200px'; // Set width
-image.style.width = '200px'; // Redundant line? Should this be height?
+image.style.height = '200px'; // Set height (fixed the typo)
 image.style.objectFit = 'contain'; // Set object-fit property
 image.setAttribute("src", name); // Set the image source attribute
 console.log(image);
@@ -42,21 +42,24 @@ const options = {
 // Above code written by my teammate 1 
 
 //
-function success() {
+function success(url, options, localStorageData) {
     // Fetch data from URL using provided options
     fetch(url, options)
     .then(response => response.json()) // Parse response as JSON
     .then(data => {
         // Handle successful response here
         let currentItems = '';
+        let currentPoints = 0; // Initialize currentPoints variable
+        const uid = localStorageData.getItem('uid'); // Get user ID from localStorageData
         // Loop through the data to find items belonging to the current user
         for (const row of data) {
-            if (row.uid == localStorage.getItem('uid')) {
+            if (row.uid == uid) {
                 currentItems = row.items; // Retrieve items for the current user
                 currentPoints = parseInt(row.points); // Parse points for the current user
+                break; // Exit loop once user data is found
             }
         }
-        console.log(localStorage.getItem("bakedgood")); // Log a specific item
+        console.log(localStorageData.getItem("bakedgood")); // Log a specific item
         let list = [];
         try {
             // Parse currentItems as JSON array
@@ -67,14 +70,14 @@ function success() {
         } catch (error) {
             console.error('Error parsing currentItems:', error.message); // Log error if parsing fails
         }
-        list.push(localStorage.getItem("bakedgood")); // Add a new item to the list
+        list.push(localStorageData.getItem("bakedgood")); // Add a new item to the list
         currentItems = JSON.stringify(list); // Convert the updated list back to JSON string
-        var points = currentPoints + parseInt(localStorage.getItem("points")); // Calculate total points
+        var points = currentPoints + parseInt(localStorageData.getItem("points")); // Calculate total points
         console.log(typeof points); // Log the type of points
         console.log(currentItems); // Log the retrieved items
         // Manipulate and update the items here
         const body = {
-            uid: localStorage.getItem('uid'), // Get user ID from localStorage
+            uid: uid, // Get user ID from localStorageData
             points: points, // Update points
             items: currentItems // Update items
         };
@@ -96,5 +99,5 @@ function success() {
     });
 }
 
-success(); // Call the success function
-
+// Call the success function with the defined URL, options, and localStorageData
+success(url, options, localStorage);
