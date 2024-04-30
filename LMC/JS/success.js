@@ -43,61 +43,61 @@ const options = {
 
 //
 function success(url, options, localStorageData) {
-    // Fetch data from URL using provided options
+    
     fetch(url, options)
-    .then(response => response.json()) // Parse response as JSON
+    .then(response => response.json()) 
     .then(data => {
-        // Handle successful response here
+        
         let currentItems = '';
-        let currentPoints = 0; // Initialize currentPoints variable
-        const uid = localStorageData.getItem('uid'); // Get user ID from localStorageData
-        // Loop through the data to find items belonging to the current user
+        let currentPoints = 0; 
+        const uid = localStorageData.getItem('uid'); 
+        
         for (const row of data) {
             if (row.uid == uid) {
-                currentItems = row.items; // Retrieve items for the current user
-                currentPoints = parseInt(row.points); // Parse points for the current user
-                break; // Exit loop once user data is found
+                currentItems = row.items; 
+                currentPoints = parseInt(row.points); 
+                break; 
             }
         }
-        console.log(localStorageData.getItem("bakedgood")); // Log a specific item
+        console.log(localStorageData.getItem("bakedgood")); 
         let list = [];
         try {
-            // Parse currentItems as JSON array
+            
             list = JSON.parse(currentItems);
             if (!Array.isArray(list)) {
-                throw new Error('Parsed data is not an array'); // Throw error if parsed data is not an array
+                throw new Error('Parsed data is not an array'); 
             }
         } catch (error) {
-            console.error('Error parsing currentItems:', error.message); // Log error if parsing fails
+            console.error('Error parsing currentItems:', error.message); 
         }
-        list.push(localStorageData.getItem("bakedgood")); // Add a new item to the list
-        currentItems = JSON.stringify(list); // Convert the updated list back to JSON string
-        var points = currentPoints + parseInt(localStorageData.getItem("points")); // Calculate total points
-        console.log(typeof points); // Log the type of points
-        console.log(currentItems); // Log the retrieved items
-        // Manipulate and update the items here
+        list.push(localStorageData.getItem("bakedgood")); 
+        currentItems = JSON.stringify(list); 
+        var points = currentPoints + parseInt(localStorageData.getItem("points")); 
+        console.log(typeof points); 
+        console.log(currentItems); 
+        
         const body = {
-            uid: uid, // Get user ID from localStorageData
-            points: points, // Update points
-            items: currentItems // Update items
+            uid: uid, 
+            points: points, 
+            items: currentItems 
         };
         const authoptions = {
-            method: 'PUT', // HTTP method for updating data
-            mode: 'cors', // Request mode
-            cache: 'default', // Cache mode
-            credentials: 'include', // Send cookies
-            body: JSON.stringify(body), // Convert body to JSON string
+            method: 'PUT', 
+            mode: 'cors', 
+            cache: 'default', 
+            credentials: 'include', 
+            body: JSON.stringify(body), 
             headers: {
-                'Content-Type': 'application/json', // Set content type header
+                'Content-Type': 'application/json', 
             }
         };
-        fetch(url, authoptions); // Send updated data to server
+        fetch(url, authoptions); 
     })
     .catch(error => {
-        // Handle error
-        console.error('Error fetching user data:', error); // Log error if fetching fails
+        
+        console.error('Error fetching user data:', error); 
     });
 }
 
-// Call the success function with the defined URL, options, and localStorageData
+
 success(url, options, localStorage);
